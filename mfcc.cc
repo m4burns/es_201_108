@@ -9,10 +9,11 @@
 
 int main() {
   MFCCExtractor<> mfcc([](const std::array<double, 14> & features){
-      for(int i = 0; i < features.size(); i++) {
-        std::cerr << features[i] << " ";
+      std::cout << features[0];
+      for(int i = 1; i < features.size(); i++) {
+        std::cout << " " << features[i];
       }
-      std::cerr << "\n";
+      std::cout << "\n";
     });
 
   double buf[1024];
