@@ -15,15 +15,15 @@ def read_mfccs(dirname):
       res.append(read_mfcc(dirname + '/' + filename))
   return res
 
-# hello = read_mfccs('hello')
-# other = read_mfccs('other')
-# 
-# X = np.array(hello + other)
-# y = np.array([ 1 for h in hello ] + [ 0 for o in other ])
-# 
-# clf = svm.LinearSVC()
-# 
-# clf.fit(X, y)
+hello = read_mfccs('hello')
+other = read_mfccs('other')
+
+X = np.array(hello + other)
+y = np.array([ 1 for h in hello ] + [ 0 for o in other ])
+
+clf = svm.LinearSVC()
+
+clf.fit(X, y)
 
 import subprocess
 import plot
@@ -33,7 +33,8 @@ def realtime_mfcc():
   while True:
     line = [ float(s) for s in proc.stdout.readline().split(b' ') ]
     if line != '':
-      plot.push(line)
+      cls = clf.predict([plot.x[0:40,0:14]])
+      plot.push(line + [cls[0] * 10])
     else:
       break
 

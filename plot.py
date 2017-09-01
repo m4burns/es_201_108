@@ -9,7 +9,7 @@ import sys
 
 fig, ax = plt.subplots()
 
-x = np.zeros([100,14])
+x = np.zeros([100,15])
 xl = threading.Lock()
 image = ax.imshow(x.T, clim=(0,10))
 
