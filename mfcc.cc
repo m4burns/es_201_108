@@ -8,7 +8,7 @@
 #include <iostream>
 
 int main() {
-  MFCCExtractor<> mfcc([](const std::array<double, 14> & features){
+  MFCCExtractor<16000> mfcc([](const std::array<double, 14> & features){
       std::cout << features[0];
       for(int i = 1; i < features.size(); i++) {
         std::cout << " " << features[i];

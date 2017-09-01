@@ -1,7 +1,7 @@
 from sklearn import svm
 import pandas as pd
 import numpy as np
-import os
+import os, threading
 
 def read_mfcc(filename):
   frame = pd.read_csv(filename, sep=' ')
@@ -15,19 +15,28 @@ def read_mfccs(dirname):
       res.append(read_mfcc(dirname + '/' + filename))
   return res
 
-hello = read_mfccs('hello')
-other = read_mfccs('other')
-
-X = np.array(hello[1:] + other)
-y = np.array([ 1 for h in hello[1:] ] + [ 0 for o in other ])
-
-clf = svm.LinearSVC()
+# hello = read_mfccs('hello')
+# other = read_mfccs('other')
+# 
+# X = np.array(hello + other)
+# y = np.array([ 1 for h in hello ] + [ 0 for o in other ])
+# 
+# clf = svm.LinearSVC()
+# 
+# clf.fit(X, y)
 
 import subprocess
-proc = subprocess.Popen(['./realtime_mfcc.sh'],stdout=subprocess.PIPE)
-while True:
-  line = proc.stdout.readline()
-  if line != '':
-    print "test:", line.rstrip()
-  else:
-    break
+import plot
+
+def realtime_mfcc():
+  proc = subprocess.Popen(['./realtime_mfcc.sh'],stdout=subprocess.PIPE)
+  while True:
+    line = [ float(s) for s in proc.stdout.readline().split(b' ') ]
+    if line != '':
+      plot.push(line)
+    else:
+      break
+
+thd = threading.Thread(target=realtime_mfcc, daemon=True)
+thd.start()
+plot.render()
