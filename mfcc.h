@@ -189,7 +189,7 @@ private:
     return 2595.0 * std::log(1.0 + f / 700.0) / std::log(10.0);
   }
   static double mel_inv(double mel) {
-    return 700.0 * (std::exp(mel / 2595.0) - 1.0);
+    return 700.0 * (std::pow(10, mel / 2595.0) - 1.0);
   }
   void computeMelBins(cbins_t & cbins) {
     const double mel_start = mel(mfscStartFrequency);
@@ -222,7 +222,7 @@ private:
     for(int i = 0; i < mfccCount; i++) {
       double C_i = 0.0;
       for(int j = 0; j < mfscCount; j++) {
-        C_i += input[j] * std::cos(M_PI * (double)i * ((double)j + 0.5) / mfscCount);
+        C_i += input[j] * std::cos(M_PI * (double)i * ((double)j + 0.5) / (double)mfscCount);
       }
       output[i] = C_i;
     }
